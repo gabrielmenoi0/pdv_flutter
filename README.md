@@ -92,7 +92,7 @@ O projeto PDV Flutter, desenvolvido no desafio técnico do precesso seletivo da 
 - [Mobx](https://pub.dev/packages/mobx) - Gerenciamento de estado local.
 - [Provider](https://pub.dev/packages/provider) - Gerenciamento de estado global.
 - [Dio](https://pub.dev/packages/dio) - Requisições HTTP.
-- [Shared preferences](https://pub.dev/packages/hive) - Gerenciamento de dados offline.
+- [Hive](https://pub.dev/packages/hive) - Gerenciamento de dados offline.
 - [Easy Localization](https://pub.dev/packages/easy_localization) - Centralização e gerenciamento de
   textos e traduções.
 - [Build_runner](https://pub.dev/packages/build_runner) - Utilizado como complemento para
