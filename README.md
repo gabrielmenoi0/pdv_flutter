@@ -14,7 +14,6 @@
 
 • [Arquitetura, técnicas e bibliotecas](#arquitetura)
 • [Abrir e rodar](#abrir-e-rodar)
-• [Licença](#licença)
 
 </div>
 
