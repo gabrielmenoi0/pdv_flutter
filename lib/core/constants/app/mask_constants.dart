@@ -1,4 +1,4 @@
-///MASCARAS MAIS COMUNS
+///MASCARAS
 class MaskConstants {
   static const CELLPHONE = '(00) 00000-0000';
   static const PHONE = '(00) 0000-0000';

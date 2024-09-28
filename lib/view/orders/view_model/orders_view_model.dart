@@ -4,7 +4,9 @@ import 'package:mobx/mobx.dart';
 import 'package:pdv_windows/core/base/model/base_view_model.dart';
 import 'package:pdv_windows/core/constants/app/app_constants.dart';
 import 'package:kartal/kartal.dart';
+import 'package:pdv_windows/core/export/base_export.dart';
 import 'package:pdv_windows/core/init/cache/locale_manager.dart';
+import 'package:pdv_windows/core/init/lang/locale_keys.g.dart';
 import 'package:pdv_windows/core/init/network/dio_network_manager.dart';
 import 'package:pdv_windows/core/init/snackbar/snackbar_services.dart';
 import 'package:pdv_windows/view/orders/model/orders_model.dart';
@@ -73,8 +75,11 @@ abstract class _OrdersViewModelBase extends BaseViewModel with Store{
       } else {
         ordersList.clear();
         ordersList.addAll(listOffline.where((order) => order.cliente!.nome!.toLowerCase().contains(controller.text.toLowerCase())));
-        if(ordersList.length==0) return SnackBarService.errorSnackBar("Foram encontrados ${ordersList.length} pedidos.");
-        return SnackBarService.successSnackBar("Foram encontrados ${ordersList.length} pedidos.");
+        if (ordersList.length == 0) {
+          return SnackBarService.errorSnackBar(LocaleKeys.no_orders_found.tr(namedArgs: {"{{number}}": ordersList.length.toString()}));
+        }
+        return SnackBarService.successSnackBar(LocaleKeys.orders_found.tr(namedArgs: {"{{number}}": ordersList.length.toString()}));
+
       }
     }catch(e){}
     finally{}
@@ -82,17 +87,18 @@ abstract class _OrdersViewModelBase extends BaseViewModel with Store{
 
   @action
   fetchOrdersAPI() async{
-    changeLoading();
 
     try {
       bool connection = await InternetConnection().hasInternetAccess;
       if (connection == false) {
         return alertErrorSync();
       }
+
+      changeLoading();
       final response = await ordersService.fetchOrders();
       if (response.ext.isNotNullOrEmpty) {
         await LocaleManager.ordersBox.saveList(OrdersModel(), response ?? []);
-        return SnackBarService.successSnackBar("Pedidos sincronizados com sucesso !");
+        return SnackBarService.successSnackBar(LocaleKeys.orders_synced_successfully.tr());
       }
     } catch (_) {
       alertErrorSync();
@@ -105,7 +111,7 @@ abstract class _OrdersViewModelBase extends BaseViewModel with Store{
 
   @action
   alertErrorSync(){
-    return SnackBarService.errorSnackBar("Não foi possível obter os pedidos !");
+    return SnackBarService.errorSnackBar(LocaleKeys.unable_to_fetch_orders.tr());
   }
 
 }

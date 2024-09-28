@@ -36,14 +36,6 @@ class NavigationRoute {
           ReportsView(),
           args.name!,
         );
-      // case NavigationConstants.STATUS:
-      //   if (args.arguments is StatusModel) {
-      //     return normalNavigate(
-      //         StatusView(status: args.arguments as StatusModel),
-      //         args.name ?? "");
-      //   }
-      //   throw NavigateException<String>(args.arguments);
-
       default:
         return MaterialPageRoute(
           builder: (context) => const NotFoundNavigationWidget(),

@@ -12,9 +12,6 @@ class LanguageManager {
 
   var defaultLocale = Locale('pt', 'BR');
   final ptLocale = const Locale('pt', 'BR');
-  final enLocale = const Locale('en', 'EUA');
-  final esLocale = const Locale('es', 'ES');
-
 
   List<Locale> get supportedLocales => [ptLocale];
 

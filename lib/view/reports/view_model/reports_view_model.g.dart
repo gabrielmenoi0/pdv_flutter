@@ -121,6 +121,118 @@ mixin _$ReportsViewModel on _ReportsViewModelBase, Store {
     });
   }
 
+  late final _$legendStatusAtom =
+      Atom(name: '_ReportsViewModelBase.legendStatus', context: context);
+
+  @override
+  ObservableList<LegendChartModel> get legendStatus {
+    _$legendStatusAtom.reportRead();
+    return super.legendStatus;
+  }
+
+  @override
+  set legendStatus(ObservableList<LegendChartModel> value) {
+    _$legendStatusAtom.reportWrite(value, super.legendStatus, () {
+      super.legendStatus = value;
+    });
+  }
+
+  late final _$legendSalesAtom =
+      Atom(name: '_ReportsViewModelBase.legendSales', context: context);
+
+  @override
+  ObservableList<LegendChartModel> get legendSales {
+    _$legendSalesAtom.reportRead();
+    return super.legendSales;
+  }
+
+  @override
+  set legendSales(ObservableList<LegendChartModel> value) {
+    _$legendSalesAtom.reportWrite(value, super.legendSales, () {
+      super.legendSales = value;
+    });
+  }
+
+  late final _$salesChartViewAtom =
+      Atom(name: '_ReportsViewModelBase.salesChartView', context: context);
+
+  @override
+  ObservableList<CustomerChartModel> get salesChartView {
+    _$salesChartViewAtom.reportRead();
+    return super.salesChartView;
+  }
+
+  @override
+  set salesChartView(ObservableList<CustomerChartModel> value) {
+    _$salesChartViewAtom.reportWrite(value, super.salesChartView, () {
+      super.salesChartView = value;
+    });
+  }
+
+  late final _$salesChartAtom =
+      Atom(name: '_ReportsViewModelBase.salesChart', context: context);
+
+  @override
+  ObservableList<ChartDataModel> get salesChart {
+    _$salesChartAtom.reportRead();
+    return super.salesChart;
+  }
+
+  @override
+  set salesChart(ObservableList<ChartDataModel> value) {
+    _$salesChartAtom.reportWrite(value, super.salesChart, () {
+      super.salesChart = value;
+    });
+  }
+
+  late final _$legendProductAtom =
+      Atom(name: '_ReportsViewModelBase.legendProduct', context: context);
+
+  @override
+  ObservableList<LegendChartModel> get legendProduct {
+    _$legendProductAtom.reportRead();
+    return super.legendProduct;
+  }
+
+  @override
+  set legendProduct(ObservableList<LegendChartModel> value) {
+    _$legendProductAtom.reportWrite(value, super.legendProduct, () {
+      super.legendProduct = value;
+    });
+  }
+
+  late final _$productChartViewAtom =
+      Atom(name: '_ReportsViewModelBase.productChartView', context: context);
+
+  @override
+  ObservableList<ProductChartModel> get productChartView {
+    _$productChartViewAtom.reportRead();
+    return super.productChartView;
+  }
+
+  @override
+  set productChartView(ObservableList<ProductChartModel> value) {
+    _$productChartViewAtom.reportWrite(value, super.productChartView, () {
+      super.productChartView = value;
+    });
+  }
+
+  late final _$productChartAtom =
+      Atom(name: '_ReportsViewModelBase.productChart', context: context);
+
+  @override
+  ObservableList<ChartDataModel> get productChart {
+    _$productChartAtom.reportRead();
+    return super.productChart;
+  }
+
+  @override
+  set productChart(ObservableList<ChartDataModel> value) {
+    _$productChartAtom.reportWrite(value, super.productChart, () {
+      super.productChart = value;
+    });
+  }
+
   late final _$isLoadingAtom =
       Atom(name: '_ReportsViewModelBase.isLoading', context: context);
 
@@ -205,11 +317,55 @@ mixin _$ReportsViewModel on _ReportsViewModelBase, Store {
   }
 
   @override
+  dynamic setInfoChartOrderStatus() {
+    final _$actionInfo = _$_ReportsViewModelBaseActionController.startAction(
+        name: '_ReportsViewModelBase.setInfoChartOrderStatus');
+    try {
+      return super.setInfoChartOrderStatus();
+    } finally {
+      _$_ReportsViewModelBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setInfoChartTopProducts() {
+    final _$actionInfo = _$_ReportsViewModelBaseActionController.startAction(
+        name: '_ReportsViewModelBase.setInfoChartTopProducts');
+    try {
+      return super.setInfoChartTopProducts();
+    } finally {
+      _$_ReportsViewModelBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setInfoChartTopCustomers() {
+    final _$actionInfo = _$_ReportsViewModelBaseActionController.startAction(
+        name: '_ReportsViewModelBase.setInfoChartTopCustomers');
+    try {
+      return super.setInfoChartTopCustomers();
+    } finally {
+      _$_ReportsViewModelBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   Color getColorForStatus(String status) {
     final _$actionInfo = _$_ReportsViewModelBaseActionController.startAction(
         name: '_ReportsViewModelBase.getColorForStatus');
     try {
       return super.getColorForStatus(status);
+    } finally {
+      _$_ReportsViewModelBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  Color getColorForCustomer(String customer) {
+    final _$actionInfo = _$_ReportsViewModelBaseActionController.startAction(
+        name: '_ReportsViewModelBase.getColorForCustomer');
+    try {
+      return super.getColorForCustomer(customer);
     } finally {
       _$_ReportsViewModelBaseActionController.endAction(_$actionInfo);
     }
@@ -313,6 +469,13 @@ filterCityList: ${filterCityList},
 filterAgeGroupList: ${filterAgeGroupList},
 ordersChart: ${ordersChart},
 ordersChartView: ${ordersChartView},
+legendStatus: ${legendStatus},
+legendSales: ${legendSales},
+salesChartView: ${salesChartView},
+salesChart: ${salesChart},
+legendProduct: ${legendProduct},
+productChartView: ${productChartView},
+productChart: ${productChart},
 isLoading: ${isLoading},
 filterOption: ${filterOption}
     ''';

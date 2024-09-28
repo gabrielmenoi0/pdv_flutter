@@ -1,9 +1,11 @@
+import 'package:hive/hive.dart';
 import 'package:kartal/kartal.dart';
+import 'package:path_provider/path_provider.dart';
 
 mixin DeviceAndCache {
   Future<void> deviceInit() async {
-    await Future.wait([
-      DeviceUtility.instance.initPackageInfo(),
-    ]);
+      DeviceUtility.instance.initPackageInfo();
+      var path = await getApplicationDocumentsDirectory();
+      Hive.init(path.path);
   }
 }

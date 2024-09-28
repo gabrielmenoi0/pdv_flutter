@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:kartal/kartal.dart';
 import 'package:pdv_windows/core/base/view/base_widget.dart';
+import 'package:pdv_windows/core/export/base_export.dart';
 import 'package:pdv_windows/core/extension/context_extension.dart';
 import 'package:pdv_windows/core/extension/date_extension.dart';
 import 'package:pdv_windows/core/extension/double_extension.dart';
+import 'package:pdv_windows/core/init/lang/locale_keys.g.dart';
 import 'package:pdv_windows/view/_product/_widgets/loading_widget.dart';
 import 'package:pdv_windows/view/orders/model/orders_model.dart';
 import 'package:pdv_windows/view/orders/view_model/orders_view_model.dart';
@@ -45,11 +47,9 @@ class OrdersView extends StatelessWidget {
                         padding: EdgeInsets.all(10),
                         child: Row(
                           children: [
-                            FractionallySizedBox(
-                                child: tableOrders(context: context)),
+                            FractionallySizedBox(child: tableOrders(context: context)),
                             SizedBox(width: context.dynamicWidth(0.005)),
-                            Expanded(
-                                child: FractionallySizedBox(child: detailOrders(context: context)))
+                            Expanded(child: FractionallySizedBox(child: detailOrders(context: context)))
                           ],
                         ),
                       ),
@@ -64,16 +64,16 @@ class OrdersView extends StatelessWidget {
         ),
       ),
       floatingActionButton: Observer(
-        builder: (context) {
-          return Visibility(
-            visible: !viewModel.isLoading,
-            child: FloatingActionButton(
-                onPressed: () => viewModel.fetchOrdersAPI(),
-                tooltip: "Sincronizar",
-                backgroundColor: context.general.colorScheme.secondary,
-                child: Icon(Icons.refresh_outlined)),
-          );
-        }
+          builder: (context) {
+            return Visibility(
+              visible: !viewModel.isLoading,
+              child: FloatingActionButton(
+                  onPressed: () => viewModel.fetchOrdersAPI(),
+                  tooltip: LocaleKeys.sync_tooltip.tr(),
+                  backgroundColor: context.general.colorScheme.secondary,
+                  child: Icon(Icons.refresh_outlined)),
+            );
+          }
       ),
     );
   }
@@ -105,9 +105,9 @@ class OrdersView extends StatelessWidget {
                       padding: const EdgeInsets.all(1.0),
                       child: FilledButton.icon(
                         onPressed: () => viewModel.searchOrders(),
-                        label: Text("Pesquisar"),
+                        label: Text(LocaleKeys.search.tr(), style: context.general.textTheme.bodyMedium,),
                         iconAlignment: IconAlignment.end,
-                        icon: Icon(Icons.search),
+                        icon: Icon(Icons.search, color: context.general.colorScheme.onPrimaryContainer,),
                         style: ButtonStyle(
                           backgroundColor: WidgetStatePropertyAll(
                               context.general.colorScheme.secondary),
@@ -115,9 +115,8 @@ class OrdersView extends StatelessWidget {
                       ),
                     ),
                   ),
-                  hintTextDirection: TextDirection.rtl,
                   hintStyle: context.general.textTheme.bodyMedium,
-                  hintText: 'Busque pelo nome do Cliente',
+                  hintText: LocaleKeys.search_hint.tr(),
                   border: InputBorder.none,
                 ),
               ),
@@ -128,6 +127,11 @@ class OrdersView extends StatelessWidget {
           ),
           Observer(
             builder: (context) {
+
+              if (viewModel.ordersList.isEmpty) {
+                return SliverFillRemaining(child: Center(child: Text(LocaleKeys.no_orders_found_view.tr(), style: context.general.textTheme.bodyMedium,)));
+              }
+
               return SliverToBoxAdapter(
                 child: Table(
                   border: TableBorder.all(),
@@ -144,23 +148,23 @@ class OrdersView extends StatelessWidget {
                       children: <Widget>[
                         Padding(
                           padding: EdgeInsets.all(8.0),
-                          child: Text("Número", textAlign: TextAlign.center),
+                          child: Text(LocaleKeys.order_number.tr(), textAlign: TextAlign.center, style: context.general.textTheme.bodyMedium,),
                         ),
                         Padding(
                           padding: EdgeInsets.all(8.0),
-                          child: Text("Data", textAlign: TextAlign.center),
+                          child: Text(LocaleKeys.order_date.tr(), textAlign: TextAlign.center, style: context.general.textTheme.bodyMedium,),
                         ),
                         Padding(
                           padding: EdgeInsets.all(8.0),
-                          child: Text("Cliente", textAlign: TextAlign.center),
+                          child: Text(LocaleKeys.client_name.tr(), textAlign: TextAlign.center, style: context.general.textTheme.bodyMedium,),
                         ),
                         Padding(
                           padding: EdgeInsets.all(8.0),
-                          child: Text("Status", textAlign: TextAlign.center),
+                          child: Text(LocaleKeys.status.tr(), textAlign: TextAlign.center, style: context.general.textTheme.bodyMedium,),
                         ),
                         Padding(
                           padding: EdgeInsets.all(8.0),
-                          child: Text("Valor Total", textAlign: TextAlign.center),
+                          child: Text(LocaleKeys.total_value.tr(), textAlign: TextAlign.center, style: context.general.textTheme.bodyMedium,),
                         ),
                       ],
                     ),
@@ -190,7 +194,7 @@ class OrdersView extends StatelessWidget {
     );
   }
 
-  Widget itemTableRow({required OrdersModel order, required String label,required BuildContext context}) {
+  Widget itemTableRow({required OrdersModel order, required String label, required BuildContext context}) {
     var viewModel = getIt<OrdersViewModel>();
     bool isCancel = order.isCancel;
 
@@ -230,7 +234,7 @@ class OrdersView extends StatelessWidget {
                       height: context.dynamicHeight(0.06),
                       width: context.dynamicWidth(0.5),
                       color: context.general.colorScheme.secondary,
-                      child: Center(child: Text("Detalhes do pedido")),
+                      child: Center(child: Text(LocaleKeys.order_details.tr(), style: context.general.textTheme.bodyMedium,)),
                     ),
                     Divider(height: 1),
                   ],
@@ -241,46 +245,47 @@ class OrdersView extends StatelessWidget {
               child: Observer(
                 builder: (context) {
                   if (viewModel.detailsOrder == null) {
-                    return Center(child: Text("Nenhum pedido selecionado"));
+                    return Center(child: Text(LocaleKeys.no_order_selected.tr(), style: context.general.textTheme.bodyMedium,));
                   }
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Informações do Pedido",
+                        LocaleKeys.order_information.tr(),
                         style: context.general.textTheme.bodyMedium?.copyWith(
                             fontWeight: FontWeight.w800,
                             fontSize: 20,
                             color: context.general.colorScheme.primary),
                       ),
                       context.sized.emptySizedHeightBoxLow,
-                      Text("Número: ${order?.numero.toString()}", style: context.general.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
-                      Text("Data Criação: ${order?.dataCriacao?.toFormatted}", style: context.general.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
-                      Text("Data Alterção: ${order?.dataAlteracao?.toFormatted}", style: context.general.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
-                      Text("Status: ${order?.status ?? ""}", style: context.general.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
-                      Text("Descontos: ${order?.desconto?.toMoney() ?? ""}", style: context.general.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
-                      Text("Frete: ${order?.frete?.toMoney() ?? ""}", style: context.general.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
-                      Text("SubTotal: ${order?.subTotal?.toMoney() ?? ""}", style: context.general.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
-                      Text("Total: ${order?.valorTotal?.toMoney() ?? ""}", style: context.general.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
+                      Text("${LocaleKeys.order_number.tr()}: ${order?.numero.toString()}", style: context.general.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
+                      Text("${LocaleKeys.order_date.tr()}: ${order?.dataCriacao?.toFormatted}", style: context.general.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
+                      Text("${LocaleKeys.order_date.tr()}: ${order?.dataAlteracao?.toFormatted}", style: context.general.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
+                      Text("${LocaleKeys.status.tr()}: ${order?.status ?? ""}", style: context.general.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
+                      Text("${LocaleKeys.discount.tr()}: ${order?.desconto?.toMoney() ?? ""}", style: context.general.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
+                      Text("${LocaleKeys.shipping.tr()}: ${order?.frete?.toMoney() ?? ""}", style: context.general.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
+                      Text("${LocaleKeys.subtotal.tr()}: ${order?.subTotal?.toMoney() ?? ""}", style: context.general.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
+                      Text("${LocaleKeys.total.tr()}: ${order?.valorTotal?.toMoney() ?? ""}", style: context.general.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
                       context.sized.emptySizedHeightBoxNormal,
-                      Text("Dados do Cliente", style: context.general.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w800, fontSize: 20, color: context.general.colorScheme.primary)),
+                      Text(LocaleKeys.client_data.tr(), style: context.general.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w800, fontSize: 20, color: context.general.colorScheme.primary)),
                       context.sized.emptySizedHeightBoxLow,
-                      Text("Cliente: ${order?.cliente?.nome ?? ""}", style: context.general.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
-                      Text("Documento: ${order?.cliente?.cpf ?? ""}", style: context.general.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
-                      Text("Data Nascimento: ${order?.cliente?.dataNascimento?.toFormatted ?? ""}", style: context.general.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
-                      Text("Email: ${order?.cliente?.email ?? ""}", style: context.general.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
+                      Text("${LocaleKeys.client.tr()}: ${order?.cliente?.nome ?? ""}", style: context.general.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
+                      Text("${LocaleKeys.document.tr()}: ${order?.cliente?.cpf ?? ""}", style: context.general.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
+                      Text("${LocaleKeys.birth_date.tr()}: ${order?.cliente?.dataNascimento?.toFormatted ?? ""}", style: context.general.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
+                      Text("${LocaleKeys.email.tr()}: ${order?.cliente?.email ?? ""}", style: context.general.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
                       context.sized.emptySizedHeightBoxNormal,
-                      Text("Local da entrega", style: context.general.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w800, fontSize: 20, color: context.general.colorScheme.primary)),
-                      Text("Endereço: ${order?.enderecoEntrega?.endereco ?? ""}", style: context.general.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
-                      Text("Número: ${order?.enderecoEntrega?.numero ?? ""}", style: context.general.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
-                      Text("CEP: ${order?.enderecoEntrega?.cep ?? ""}", style: context.general.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
-                      Text("Bairro: ${order?.enderecoEntrega?.bairro ?? ""}", style: context.general.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
-                      Text("Cidade: ${order?.enderecoEntrega?.cidade ?? ""}", style: context.general.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
-                      Text("Estado: ${order?.enderecoEntrega?.estado ?? ""}", style: context.general.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
-                      Text("Complemento: ${order?.enderecoEntrega?.complemento ?? ""}", style: context.general.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
-                      Text("Referência: ${order?.enderecoEntrega?.referencia ?? ""}", style: context.general.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
+                      Text(LocaleKeys.delivery_location.tr(), style: context.general.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w800, fontSize: 20, color: context.general.colorScheme.primary)),
+                      Text("${LocaleKeys.address.tr()}: ${order?.enderecoEntrega?.endereco ?? ""}", style: context.general.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
+                      Text("${LocaleKeys.number.tr()}: ${order?.enderecoEntrega?.numero ?? ""}", style: context.general.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
+                      Text("${LocaleKeys.zip_code.tr()}: ${order?.enderecoEntrega?.cep ?? ""}", style: context.general.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
+                      Text("${LocaleKeys.neighborhood.tr()}: ${order?.enderecoEntrega?.bairro ?? ""}", style: context.general.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
+                      Text("${LocaleKeys.city.tr()}: ${order?.enderecoEntrega?.cidade ?? ""}", style: context.general.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
+                      Text("${LocaleKeys.state.tr()}: ${order?.enderecoEntrega?.estado ?? ""}", style: context.general.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
+                      Text("${LocaleKeys.complement.tr()}: ${order?.enderecoEntrega?.complemento ?? ""}", style: context.general.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
+                      Text("${LocaleKeys.reference.tr()}: ${order?.enderecoEntrega?.referencia ?? ""}", style: context.general.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
                     ],
                   );
+
                 },
               ),
             ),
@@ -290,4 +295,3 @@ class OrdersView extends StatelessWidget {
     );
   }
 }
-

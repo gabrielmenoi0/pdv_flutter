@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'dart:math';
+import 'package:pdv_windows/core/export/base_export.dart';
+import 'package:pdv_windows/core/init/lang/locale_keys.g.dart';
 import 'package:pdv_windows/view/reports/model/chart_data_model.dart';
 import 'package:pdv_windows/view/reports/model/customers_charts_model.dart';
 import 'package:pdv_windows/view/reports/model/legend_chart_model.dart';
@@ -266,7 +268,7 @@ abstract class _ReportsViewModelBase extends BaseViewModel with Store{
 
   @action
   export() async{
-    if(filterOption == null) return SnackBarService.errorSnackBar("Selecione um filtro!");
+    if(filterOption == null) return SnackBarService.errorSnackBar(LocaleKeys.select_filter.tr());
     switch (filterOption?.option!) {
       case "1":
         exportProductsToExcel();
@@ -293,9 +295,9 @@ abstract class _ReportsViewModelBase extends BaseViewModel with Store{
 
       File(filePath)..createSync(recursive: true)..writeAsBytesSync(bytes);
 
-      return SnackBarService.successSnackBar("Dados exportados para a pasta 'Downloads'!");
+      return SnackBarService.successSnackBar(LocaleKeys.export_success.tr());
     }catch(e){
-      return SnackBarService.errorSnackBar("Não foi possível exportar os dados!");
+      return SnackBarService.errorSnackBar(LocaleKeys.export_error.tr());
     }
   }
 
@@ -303,7 +305,7 @@ abstract class _ReportsViewModelBase extends BaseViewModel with Store{
 
       final xcel.Workbook workbook = xcel.Workbook();
       final xcel.Worksheet sheet = workbook.worksheets[0];
-      final List<String> columns = ['Produto','Quantidade', 'Quantidade'];
+      final List<String> columns = [LocaleKeys.product.tr(),LocaleKeys.quantity.tr(),LocaleKeys.unit_price.tr()];
 
       final xcel.Style headerStyle = workbook.styles.add('headerStyle');
       headerStyle.bold = true;
@@ -334,7 +336,7 @@ abstract class _ReportsViewModelBase extends BaseViewModel with Store{
   void exportPaymentsToExcel() async {
     final xcel.Workbook workbook = xcel.Workbook();
     final xcel.Worksheet sheet = workbook.worksheets[0];
-    final List<String> columns = ['Parcela', 'Forma', 'Valor'];
+    final List<String> columns = [LocaleKeys.installment.tr(), LocaleKeys.method.tr(), LocaleKeys.value.tr()];
 
     final xcel.Style headerStyle = workbook.styles.add('headerStyle');
     headerStyle.bold = true;
@@ -366,7 +368,7 @@ abstract class _ReportsViewModelBase extends BaseViewModel with Store{
   void exportCitiesToExcel() async {
     final xcel.Workbook workbook = xcel.Workbook();
     final xcel.Worksheet sheet = workbook.worksheets[0];
-    final List<String> columns = ['Cidade', 'Quantidade', 'Valor Total'];
+    final List<String> columns = [LocaleKeys.city.tr(), LocaleKeys.quantity.tr(), LocaleKeys.total_value.tr()];
 
     final xcel.Style headerStyle = workbook.styles.add('headerStyle');
     headerStyle.bold = true;
@@ -399,7 +401,7 @@ abstract class _ReportsViewModelBase extends BaseViewModel with Store{
   void exportAgeGroupsToExcel() async {
     final xcel.Workbook workbook = xcel.Workbook();
     final xcel.Worksheet sheet = workbook.worksheets[0];
-    final List<String> columns = ['Faixa Etária', 'Quantidade', 'Valor Total'];
+    final List<String> columns = [LocaleKeys.age_group.tr(), LocaleKeys.quantity.tr(), LocaleKeys.total_value.tr()];
 
     final xcel.Style headerStyle = workbook.styles.add('headerStyle');
     headerStyle.bold = true;
@@ -512,10 +514,26 @@ abstract class _ReportsViewModelBase extends BaseViewModel with Store{
   @action
   setFilterList(){
     optionFilter = [
-      FilterReportModel(id: uuid.v4(), option: "1", label: "Listagem de produtos mais vendidos"),
-      FilterReportModel(id: uuid.v4(), option: "2", label: "Totalização de Formas de Pagamento por dia"),
-      FilterReportModel(id: uuid.v4(), option: "3", label: "Totalização de vendas por Cidade"),
-      FilterReportModel(id: uuid.v4(), option: "4", label: "Totalização de vendas por Faixa Etária"),
+      FilterReportModel(
+        id: uuid.v4(),
+        option: "1",
+        label: LocaleKeys.product_list.tr()
+      ),
+      FilterReportModel(
+        id: uuid.v4(),
+        option: "2",
+        label: LocaleKeys.payment_totalization.tr(),
+      ),
+      FilterReportModel(
+        id: uuid.v4(),
+        option: "3",
+        label: LocaleKeys.sales_totalization_by_city.tr(),
+      ),
+      FilterReportModel(
+        id: uuid.v4(),
+        option: "4",
+        label: LocaleKeys.sales_totalization_by_age.tr(),
+      ),
     ];
   }
 

@@ -4,7 +4,7 @@ import 'package:pdv_windows/core/init/network/exception.dart';
 class DioErrorManager {
   static ApiException handleError(DioException error) {
     print(error);
-    var message = error.response?.data['RESULT'][0]["message"];
+    var message = error.response?.data;
     switch (error.type) {
       case DioExceptionType.connectionTimeout:
         return ApiException(

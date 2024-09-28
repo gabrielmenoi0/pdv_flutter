@@ -16,9 +16,7 @@ class CNPJValidator {
 
   static const STRIP_REGEX = r'[^\d]';
 
-  // Compute the Verifier Digit (or "Dígito Verificador (DV)" in PT-BR).
-  // You can learn more about the algorithm on [wikipedia (pt-br)](https://pt.wikipedia.org/wiki/D%C3%ADgito_verificador)
-  static int _verifierDigit(String cnpj) {
+    static int _verifierDigit(String cnpj) {
     int index = 2;
 
     List<int> reverse =
@@ -55,17 +53,14 @@ class CNPJValidator {
       cnpj = strip(cnpj);
     }
 
-    // cnpj must be defined
     if (cnpj == null || cnpj.isEmpty) {
       return false;
     }
 
-    // cnpj must have 14 chars
     if (cnpj.length != 14) {
       return false;
     }
 
-    // cnpj can't be blacklisted
     if (BLACKLIST.indexOf(cnpj) != -1) {
       return false;
     }

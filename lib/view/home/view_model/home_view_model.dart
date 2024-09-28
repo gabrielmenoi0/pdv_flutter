@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:mobx/mobx.dart';
 import 'package:pdv_windows/core/base/model/base_view_model.dart';
-import 'package:pdv_windows/core/constants/navigation/navigation_constants.dart';
 
 part 'home_view_model.g.dart';
 

@@ -17,9 +17,7 @@ class CPFValidator {
 
   static const STRIP_REGEX = r'[^\d]';
 
-  // Compute the Verifier Digit (or "Dígito Verificador (DV)" in PT-BR).
-  // You can learn more about the algorithm on [wikipedia (pt-br)](https://pt.wikipedia.org/wiki/D%C3%ADgito_verificador)
-  static int _verifierDigit(String cpf) {
+   static int _verifierDigit(String cpf) {
     List<int> numbers =
     cpf.split("").map((number) => int.parse(number, radix: 10)).toList();
 
@@ -55,17 +53,14 @@ class CPFValidator {
       cpf = strip(cpf);
     }
 
-    // CPF must be defined
     if (cpf == null || cpf.isEmpty) {
       return false;
     }
 
-    // CPF must have 11 chars
     if (cpf.length != 11) {
       return false;
     }
 
-    // CPF can't be blacklisted
     if (BLACKLIST.indexOf(cpf) != -1) {
       return false;
     }

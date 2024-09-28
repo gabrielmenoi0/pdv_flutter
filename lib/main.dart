@@ -16,19 +16,10 @@ import 'package:pdv_windows/viewmodel/setup_getIt.dart';
 import 'package:provider/provider.dart';
 
 
-class MyHttpOverrides extends HttpOverrides{
-  @override
-  HttpClient createHttpClient(SecurityContext? context){
-    return super.createHttpClient(context)
-      ..badCertificateCallback = (X509Certificate cert, String host, int port)=> true;
-  }
-}
-
 Future<void> main() async {
   runZonedGuarded(
         () async {
       await _init();
-      HttpOverrides.global = MyHttpOverrides();
       runApp(
         MultiProvider(
           providers: [...ApplicationProvider.instance.dependItems],
@@ -51,8 +42,6 @@ Future<void> _init() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   ///INIT
-  var path = await getApplicationDocumentsDirectory();
-  Hive.init(path.path);
   setupGetIt();
   await EasyLocalization.ensureInitialized();
 
