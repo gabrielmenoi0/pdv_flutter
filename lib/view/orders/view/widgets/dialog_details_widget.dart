@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kartal/kartal.dart';
+import 'package:pdv_windows/core/extension/context_extension.dart';
 import 'package:pdv_windows/core/extension/double_extension.dart';
 import 'package:pdv_windows/view/orders/view_model/orders_view_model.dart';
 import 'package:pdv_windows/viewmodel/setup_getIt.dart';
@@ -63,7 +64,7 @@ class DialogDetailsWidget{
                                     child: Text(
                                       product.nome ??"",
                                       textAlign: TextAlign.center,
-                                      style: context.textTheme.bodyMedium?.copyWith(color: context.colorScheme.onPrimaryContainer,
+                                      style: context.general.textTheme.bodyMedium?.copyWith(color: context.general.colorScheme.onPrimaryContainer,
                                       ),
                                     ),
                                   ),
@@ -72,7 +73,7 @@ class DialogDetailsWidget{
                                     child: Text(
                                       product.quantidade.toString() ??"",
                                       textAlign: TextAlign.center,
-                                      style: context.textTheme.bodyMedium?.copyWith(color: context.colorScheme.onPrimaryContainer,
+                                      style: context.general.textTheme.bodyMedium?.copyWith(color: context.general.colorScheme.onPrimaryContainer,
                                       ),
                                     ),
                                   ),
@@ -81,7 +82,7 @@ class DialogDetailsWidget{
                                     child: Text(
                                       product.valorUnitario?.toMoney() ??"",
                                       textAlign: TextAlign.center,
-                                      style: context.textTheme.bodyMedium?.copyWith(color: context.colorScheme.onPrimaryContainer,
+                                      style: context.general.textTheme.bodyMedium?.copyWith(color: context.general.colorScheme.onPrimaryContainer,
                                       ),
                                     ),
                                   ),
@@ -166,13 +167,13 @@ Widget itemTable({required String label, required BuildContext context}){
     onExit: _onExit,
     cursor: MouseCursor.defer,
     child: Container(
-      color: mouseEnter ? context.colorScheme.secondary : Colors.white,
+      color: mouseEnter ? context.general.colorScheme.secondary : Colors.white,
       child: Padding(
         padding: EdgeInsets.all(8.0),
         child: Text(
           label ??"",
           textAlign: TextAlign.center,
-          style: context.textTheme.bodyMedium?.copyWith(color: context.colorScheme.onPrimaryContainer,
+          style: context.general.textTheme.bodyMedium?.copyWith(color: context.general.colorScheme.onPrimaryContainer,
           ),
         ),
       ),

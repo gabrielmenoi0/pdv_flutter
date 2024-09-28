@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:pdv_windows/core/export/base_export.dart';
 import 'package:mobx/mobx.dart';
 import 'package:pdv_windows/core/base/model/base_view_model.dart';
 import 'package:pdv_windows/core/constants/navigation/navigation_constants.dart';
+import 'package:pdv_windows/core/extension/context_extension.dart';
 import 'package:pdv_windows/view/splash/viewmodel/device_and_cache.dart';
 
 part 'splash_view_model.g.dart';

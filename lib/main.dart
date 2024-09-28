@@ -75,7 +75,7 @@ class _MyAppState extends State<MyApp> {
         connectionNotificationOptions: ConnectionNotificationOptions(
             disconnectedText: LocaleKeys.disconnected_text.tr(),
             connectedText: LocaleKeys.connected_text.tr(),
-            alignment: AlignmentDirectional.topCenter,
+            alignment: AlignmentDirectional.bottomStart,
             height: 50
         ),
         child: MaterialApp(

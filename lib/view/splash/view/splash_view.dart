@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pdv_windows/core/extension/context_extension.dart';
 import 'package:pdv_windows/view/_product/_constants/image_path.dart';
 import 'package:kartal/kartal.dart';
 import 'package:pdv_windows/core/base/view/base_widget.dart';
@@ -21,7 +22,7 @@ class SplashView extends StatelessWidget {
 
   Widget buildScaffoldBody(BuildContext context, SplashViewModel viewModel) {
     return Scaffold(
-      backgroundColor: context.colorScheme.onSurface,
+      backgroundColor: context.general.colorScheme.onSurface,
       body: SafeArea(
         child: Center(
           child: TweenAnimationBuilder(
@@ -39,13 +40,6 @@ class SplashView extends StatelessWidget {
               height: 2000,
             ),
           ),
-        ),
-      ),
-      bottomNavigationBar: Text(
-        DeviceUtility.instance.packageInfo?.version ?? "",
-        textAlign: TextAlign.center,
-        style: context.textTheme.bodyMedium?.copyWith(
-          color: Colors.black,
         ),
       ),
     );

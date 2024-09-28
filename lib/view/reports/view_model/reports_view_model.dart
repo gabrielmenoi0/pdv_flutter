@@ -1,5 +1,10 @@
 import 'dart:io';
+import 'dart:math';
 import 'package:pdv_windows/view/reports/model/chart_data_model.dart';
+import 'package:pdv_windows/view/reports/model/customers_charts_model.dart';
+import 'package:pdv_windows/view/reports/model/legend_chart_model.dart';
+import 'package:pdv_windows/view/reports/model/order_chart_model.dart';
+import 'package:pdv_windows/view/reports/model/product_chart_model.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:syncfusion_flutter_xlsio/xlsio.dart' as xcel;
 import 'package:flutter/material.dart';
@@ -25,9 +30,11 @@ abstract class _ReportsViewModelBase extends BaseViewModel with Store{
   void dispose() {}
 
   @override
-  void init() {
-    fetchProducts();
+  void init() async{
+    filterOption = null;
+    await fetchProducts();
     setFilterList();
+    setInfoCharts();
   }
 
   @override
@@ -35,21 +42,7 @@ abstract class _ReportsViewModelBase extends BaseViewModel with Store{
     viewModelContext = context;
   }
 
-  @observable
-  final List<ChartDataModel> chartData = [
-    ChartDataModel('David', 25),
-    ChartDataModel('Steve', 38),
-    ChartDataModel('Jack', 34),
-    ChartDataModel('Others', 52)
-  ];
-  var data = [
-    ChartDataModel('CHN', 12),
-    ChartDataModel('GER', 15),
-    ChartDataModel('RUS', 30),
-    ChartDataModel('BRZ', 6.4),
-    ChartDataModel('IND', 14)
-  ];
- var tooltip = TooltipBehavior(enable: true);
+  var tooltip = TooltipBehavior(enable: true);
 
   @observable
   ObservableList<OrdersModel> ordersList = ObservableList.of([]);
@@ -67,6 +60,34 @@ abstract class _ReportsViewModelBase extends BaseViewModel with Store{
   ObservableList<AgeGroupModel> filterAgeGroupList = ObservableList.of([]);
 
   @observable
+  ObservableList<OrderChartModel> ordersChart = ObservableList.of([]);
+
+  @observable
+  ObservableList<ChartDataModel> ordersChartView = ObservableList.of([]);
+
+  @observable
+  ObservableList<LegendChartModel> legendStatus = ObservableList.of([]);
+
+  @observable
+  ObservableList<LegendChartModel> legendSales = ObservableList.of([]);
+
+  @observable
+  ObservableList<CustomerChartModel> salesChartView = ObservableList.of([]);
+
+  @observable
+  ObservableList<ChartDataModel> salesChart = ObservableList.of([]);
+
+  @observable
+  ObservableList<LegendChartModel> legendProduct = ObservableList.of([]);
+
+  @observable
+  ObservableList<ProductChartModel> productChartView = ObservableList.of([]);
+
+  @observable
+  ObservableList<ChartDataModel> productChart = ObservableList.of([]);
+
+
+  @observable
   bool isLoading = false;
 
   @observable
@@ -81,6 +102,138 @@ abstract class _ReportsViewModelBase extends BaseViewModel with Store{
     isLoading = !isLoading;
   }
 
+  @action
+  setInfoCharts(){
+    setInfoChartOrderStatus();
+    setInfoChartTopCustomers();
+    setInfoChartTopProducts();
+  }
+
+  @action
+  setInfoChartOrderStatus() {
+    Map<String, int> statusCountMap = {};
+
+    ordersList.forEach((order) {
+      String status = order.status ?? "";
+      if (statusCountMap.containsKey(status)) {
+        statusCountMap[status] = statusCountMap[status]! + 1;
+      } else {
+        statusCountMap[status] = 1;
+      }
+    });
+
+    ordersChart.clear();
+    ordersChartView.clear();
+    legendStatus.clear();
+
+    var sortedStatusCount = statusCountMap.entries.toList()
+      ..sort((a, b) => a.value.compareTo(b.value));
+
+    sortedStatusCount.forEach((entry) {
+      String status = entry.key;
+      int qtd = entry.value;
+
+      ordersChart.add(OrderChartModel(qtd: qtd, status: status));
+      ordersChartView.add(ChartDataModel(status, qtd.toDouble()));
+      legendStatus.add(LegendChartModel(color: getColorForStatus(status), label: status));
+    });
+  }
+
+
+  @action
+  setInfoChartTopProducts() {
+    Map<String, double> productTopSalesMap = {};
+
+    ordersList.forEach((order) {
+      order.itens?.forEach((item) {
+        String productName = item.nome ?? "";
+        double itemTotal = item.valorUnitario ?? 0.0;
+
+        if (productTopSalesMap.containsKey(productName)) {
+          productTopSalesMap[productName] = productTopSalesMap[productName]! + itemTotal;
+        } else {
+          productTopSalesMap[productName] = itemTotal;
+        }
+      });
+    });
+
+    productChart.clear();
+    productChartView.clear();
+    legendProduct.clear();
+
+    var sortedProductSales = productTopSalesMap.entries.toList()..sort((a, b) => b.value.compareTo(a.value));
+
+    sortedProductSales.forEach((entry) {
+      String product = entry.key;
+      double totalSales = entry.value;
+      productChartView.add(ProductChartModel(totalSales: totalSales,productName: product));
+      productChart.add(ChartDataModel(product, totalSales));
+      legendProduct.add(LegendChartModel(color: getColorForCustomer(product), label: product));
+    });
+  }
+
+
+
+  @action
+  setInfoChartTopCustomers() {
+    Map<String, double> customerSalesMap = {};
+
+    ordersList.forEach((order) {
+      String customer = order.cliente?.nome ?? "";
+      double orderTotal = order.valorTotal ?? 0.0;
+
+      if (customerSalesMap.containsKey(customer)) {
+        customerSalesMap[customer] = customerSalesMap[customer]! + orderTotal;
+      } else {
+        customerSalesMap[customer] = orderTotal;
+      }
+    });
+
+    salesChart.clear();
+    salesChartView.clear();
+    legendSales.clear();
+
+    var sortedCustomerSales = customerSalesMap.entries.toList()
+      ..sort((a, b) => b.value.compareTo(a.value));
+
+    sortedCustomerSales.forEach((entry) {
+      String customer = entry.key;
+      double totalSales = entry.value;
+
+      salesChartView.add(CustomerChartModel(totalSales: totalSales, customer: customer));
+      salesChart.add(ChartDataModel(customer, totalSales));
+      legendSales.add(LegendChartModel(color: getColorForCustomer(customer), label: customer));
+    });
+  }
+
+
+
+  @action
+  Color getColorForStatus(String status) {
+    switch (status) {
+      case "CANCELADO":
+        return Color(0xff0c97d4);
+      case "APROVADO":
+        return Color(0xff0476a0);
+      default:
+        return Colors.white;
+    }
+  }
+
+  @action
+  Color getColorForCustomer(String customer) {
+    List<Color> colors = [
+      Color(0xFFE8EAE9),
+      Color(0xFF067BA6),
+      Color(0xFF7CA536),
+      Color(0xFF979B95),
+      Color(0xFFA6C8BA),
+    ];
+
+    final random = Random();
+    int randomIndex = random.nextInt(colors.length);
+    return colors[randomIndex];
+  }
   @action
   setFilterTable(FilterReportModel filter){
     filterOption = filter;

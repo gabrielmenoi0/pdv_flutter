@@ -1,5 +1,6 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
+import 'package:kartal/kartal.dart';
 import 'package:pdv_windows/core/export/base_export.dart';
 import 'package:pdv_windows/core/init/lang/locale_keys.g.dart';
 import 'package:pdv_windows/core/init/navigation/navigation_service.dart';
@@ -12,8 +13,8 @@ class SnackBarService {
       message: message,
       duration: const Duration(seconds: 4),
       isDismissible: false,
-      backgroundColor: const Color(0xffE64E28),
-      flushbarPosition: FlushbarPosition.BOTTOM,
+      backgroundColor: Colors.orange,
+      flushbarPosition: FlushbarPosition.TOP,
       flushbarStyle: FlushbarStyle.FLOATING,
       margin: const EdgeInsets.all(16),
       padding: const EdgeInsets.all(16),
@@ -30,7 +31,7 @@ class SnackBarService {
       duration: const Duration(seconds: 4),
       isDismissible: false,
       backgroundColor: Colors.green,
-      flushbarPosition: FlushbarPosition.BOTTOM,
+      flushbarPosition: FlushbarPosition.TOP,
       flushbarStyle: FlushbarStyle.FLOATING,
       margin: const EdgeInsets.all(16),
       padding: const EdgeInsets.all(16),
@@ -53,20 +54,20 @@ class SnackBarService {
         builder: (context) {
           return AlertDialog(
             icon: icon,
-            contentPadding: context.paddingNormal,
-            actionsPadding: context.paddingNormal,
+            contentPadding: context.padding.normal,
+            actionsPadding: context.padding.normal,
             backgroundColor: Colors.white,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(30))),
             title: Text(
               title.tr(),
               textAlign: TextAlign.center,
-              style: context.textTheme.headlineSmall?.copyWith(
+              style: context.general.textTheme.headlineSmall?.copyWith(
                   color: isSuccess ? Color(0xff19B377) : Color(0xffF4483B)),
             ),
             content: Text(message.tr(),
                 textAlign: TextAlign.center,
-                style: context.textTheme.bodyLarge),
+                style: context.general.textTheme.bodyLarge),
             actions: isSuccess
                 ? [
               FilledButton(

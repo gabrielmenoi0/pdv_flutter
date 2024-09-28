@@ -1,9 +1,9 @@
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:mobx/mobx.dart';
 import 'package:pdv_windows/core/base/model/base_view_model.dart';
 import 'package:pdv_windows/core/constants/app/app_constants.dart';
-import 'package:pdv_windows/core/export/base_export.dart';
+import 'package:kartal/kartal.dart';
 import 'package:pdv_windows/core/init/cache/locale_manager.dart';
 import 'package:pdv_windows/core/init/network/dio_network_manager.dart';
 import 'package:pdv_windows/core/init/snackbar/snackbar_services.dart';
@@ -85,22 +85,27 @@ abstract class _OrdersViewModelBase extends BaseViewModel with Store{
     changeLoading();
 
     try {
-      // var connectivityResult = await (Connectivity().checkConnectivity());
-      // if (connectivityResult == ConnectivityResult.none) {
-      //   return SnackBarService.errorSnackBar("Não foi possível obter os pedidos !");
-      // }
+      bool connection = await InternetConnection().hasInternetAccess;
+      if (connection == false) {
+        return alertErrorSync();
+      }
       final response = await ordersService.fetchOrders();
-      if (response.isNotNullOrEmpty) {
+      if (response.ext.isNotNullOrEmpty) {
         await LocaleManager.ordersBox.saveList(OrdersModel(), response ?? []);
         return SnackBarService.successSnackBar("Pedidos sincronizados com sucesso !");
       }
     } catch (_) {
-      return SnackBarService.errorSnackBar("Não foi possível obter os pedidos !");
+      alertErrorSync();
     }
     finally{
       changeLoading();
     }
     return null;
+  }
+
+  @action
+  alertErrorSync(){
+    return SnackBarService.errorSnackBar("Não foi possível obter os pedidos !");
   }
 
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:kartal/kartal.dart';
 import 'package:pdv_windows/core/base/view/base_widget.dart';
+import 'package:pdv_windows/core/extension/context_extension.dart';
 import 'package:pdv_windows/core/extension/date_extension.dart';
 import 'package:pdv_windows/core/extension/double_extension.dart';
 import 'package:pdv_windows/view/_product/_widgets/loading_widget.dart';
@@ -26,7 +27,7 @@ class OrdersView extends StatelessWidget {
 
   Widget buildScaffoldBody(BuildContext context, OrdersViewModel viewModel) {
     return Scaffold(
-      backgroundColor: context.colorScheme.secondary,
+      backgroundColor: context.general.colorScheme.secondary,
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
@@ -52,7 +53,7 @@ class OrdersView extends StatelessWidget {
                           ],
                         ),
                       ),
-                      color: context.colorScheme.onSurface,
+                      color: context.general.colorScheme.onSurface,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15),
                       ),
@@ -69,7 +70,7 @@ class OrdersView extends StatelessWidget {
             child: FloatingActionButton(
                 onPressed: () => viewModel.fetchOrdersAPI(),
                 tooltip: "Sincronizar",
-                backgroundColor: context.colorScheme.secondary,
+                backgroundColor: context.general.colorScheme.secondary,
                 child: Icon(Icons.refresh_outlined)),
           );
         }
@@ -109,13 +110,13 @@ class OrdersView extends StatelessWidget {
                         icon: Icon(Icons.search),
                         style: ButtonStyle(
                           backgroundColor: WidgetStatePropertyAll(
-                              context.colorScheme.secondary),
+                              context.general.colorScheme.secondary),
                         ),
                       ),
                     ),
                   ),
                   hintTextDirection: TextDirection.rtl,
-                  hintStyle: context.textTheme.bodyMedium,
+                  hintStyle: context.general.textTheme.bodyMedium,
                   hintText: 'Busque pelo nome do Cliente',
                   border: InputBorder.none,
                 ),
@@ -123,7 +124,7 @@ class OrdersView extends StatelessWidget {
             ),
           ),
           SliverToBoxAdapter(
-            child: context.emptySizedHeightBoxLow3x,
+            child: context.sized.emptySizedHeightBoxLow3x,
           ),
           Observer(
             builder: (context) {
@@ -167,7 +168,7 @@ class OrdersView extends StatelessWidget {
                       return TableRow(
                         decoration: BoxDecoration(
                           color: viewModel.detailsOrder?.id == order.id!
-                              ? context.colorScheme.secondary
+                              ? context.general.colorScheme.secondary
                               : Colors.white,
                         ),
                         children: <Widget>[
@@ -201,8 +202,8 @@ class OrdersView extends StatelessWidget {
         child: Text(
           label,
           textAlign: TextAlign.center,
-          style: context.textTheme.bodyMedium?.copyWith(
-            color: isCancel ? context.colorScheme.error : context.colorScheme.onPrimaryContainer,
+          style: context.general.textTheme.bodyMedium?.copyWith(
+            color: isCancel ? context.general.colorScheme.error : context.general.colorScheme.onPrimaryContainer,
           ),
         ),
       ),
@@ -228,7 +229,7 @@ class OrdersView extends StatelessWidget {
                     Container(
                       height: context.dynamicHeight(0.06),
                       width: context.dynamicWidth(0.5),
-                      color: context.colorScheme.secondary,
+                      color: context.general.colorScheme.secondary,
                       child: Center(child: Text("Detalhes do pedido")),
                     ),
                     Divider(height: 1),
@@ -247,37 +248,37 @@ class OrdersView extends StatelessWidget {
                     children: [
                       Text(
                         "Informações do Pedido",
-                        style: context.textTheme.bodyMedium?.copyWith(
+                        style: context.general.textTheme.bodyMedium?.copyWith(
                             fontWeight: FontWeight.w800,
                             fontSize: 20,
-                            color: context.colorScheme.primary),
+                            color: context.general.colorScheme.primary),
                       ),
-                      context.emptySizedHeightBoxLow,
-                      Text("Número: ${order?.numero.toString()}", style: context.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
-                      Text("Data Criação: ${order?.dataCriacao?.toFormatted}", style: context.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
-                      Text("Data Alterção: ${order?.dataAlteracao?.toFormatted}", style: context.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
-                      Text("Status: ${order?.status ?? ""}", style: context.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
-                      Text("Descontos: ${order?.desconto?.toMoney() ?? ""}", style: context.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
-                      Text("Frete: ${order?.frete?.toMoney() ?? ""}", style: context.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
-                      Text("SubTotal: ${order?.subTotal?.toMoney() ?? ""}", style: context.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
-                      Text("Total: ${order?.valorTotal?.toMoney() ?? ""}", style: context.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
-                      context.emptySizedHeightBoxNormal,
-                      Text("Dados do Cliente", style: context.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w800, fontSize: 20, color: context.colorScheme.primary)),
-                      context.emptySizedHeightBoxLow,
-                      Text("Cliente: ${order?.cliente?.nome ?? ""}", style: context.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
-                      Text("Documento: ${order?.cliente?.cpf ?? ""}", style: context.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
-                      Text("Data Nascimento: ${order?.cliente?.dataNascimento?.toFormatted ?? ""}", style: context.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
-                      Text("Email: ${order?.cliente?.email ?? ""}", style: context.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
-                      context.emptySizedHeightBoxNormal,
-                      Text("Local da entrega", style: context.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w800, fontSize: 20, color: context.colorScheme.primary)),
-                      Text("Endereço: ${order?.enderecoEntrega?.endereco ?? ""}", style: context.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
-                      Text("Número: ${order?.enderecoEntrega?.numero ?? ""}", style: context.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
-                      Text("CEP: ${order?.enderecoEntrega?.cep ?? ""}", style: context.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
-                      Text("Bairro: ${order?.enderecoEntrega?.bairro ?? ""}", style: context.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
-                      Text("Cidade: ${order?.enderecoEntrega?.cidade ?? ""}", style: context.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
-                      Text("Estado: ${order?.enderecoEntrega?.estado ?? ""}", style: context.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
-                      Text("Complemento: ${order?.enderecoEntrega?.complemento ?? ""}", style: context.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
-                      Text("Referência: ${order?.enderecoEntrega?.referencia ?? ""}", style: context.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
+                      context.sized.emptySizedHeightBoxLow,
+                      Text("Número: ${order?.numero.toString()}", style: context.general.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
+                      Text("Data Criação: ${order?.dataCriacao?.toFormatted}", style: context.general.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
+                      Text("Data Alterção: ${order?.dataAlteracao?.toFormatted}", style: context.general.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
+                      Text("Status: ${order?.status ?? ""}", style: context.general.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
+                      Text("Descontos: ${order?.desconto?.toMoney() ?? ""}", style: context.general.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
+                      Text("Frete: ${order?.frete?.toMoney() ?? ""}", style: context.general.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
+                      Text("SubTotal: ${order?.subTotal?.toMoney() ?? ""}", style: context.general.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
+                      Text("Total: ${order?.valorTotal?.toMoney() ?? ""}", style: context.general.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
+                      context.sized.emptySizedHeightBoxNormal,
+                      Text("Dados do Cliente", style: context.general.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w800, fontSize: 20, color: context.general.colorScheme.primary)),
+                      context.sized.emptySizedHeightBoxLow,
+                      Text("Cliente: ${order?.cliente?.nome ?? ""}", style: context.general.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
+                      Text("Documento: ${order?.cliente?.cpf ?? ""}", style: context.general.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
+                      Text("Data Nascimento: ${order?.cliente?.dataNascimento?.toFormatted ?? ""}", style: context.general.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
+                      Text("Email: ${order?.cliente?.email ?? ""}", style: context.general.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
+                      context.sized.emptySizedHeightBoxNormal,
+                      Text("Local da entrega", style: context.general.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w800, fontSize: 20, color: context.general.colorScheme.primary)),
+                      Text("Endereço: ${order?.enderecoEntrega?.endereco ?? ""}", style: context.general.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
+                      Text("Número: ${order?.enderecoEntrega?.numero ?? ""}", style: context.general.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
+                      Text("CEP: ${order?.enderecoEntrega?.cep ?? ""}", style: context.general.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
+                      Text("Bairro: ${order?.enderecoEntrega?.bairro ?? ""}", style: context.general.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
+                      Text("Cidade: ${order?.enderecoEntrega?.cidade ?? ""}", style: context.general.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
+                      Text("Estado: ${order?.enderecoEntrega?.estado ?? ""}", style: context.general.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
+                      Text("Complemento: ${order?.enderecoEntrega?.complemento ?? ""}", style: context.general.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
+                      Text("Referência: ${order?.enderecoEntrega?.referencia ?? ""}", style: context.general.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400, fontSize: 16)),
                     ],
                   );
                 },

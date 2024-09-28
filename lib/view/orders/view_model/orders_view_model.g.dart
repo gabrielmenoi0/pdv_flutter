@@ -110,6 +110,17 @@ mixin _$OrdersViewModel on _OrdersViewModelBase, Store {
   }
 
   @override
+  dynamic alertErrorSync() {
+    final _$actionInfo = _$_OrdersViewModelBaseActionController.startAction(
+        name: '_OrdersViewModelBase.alertErrorSync');
+    try {
+      return super.alertErrorSync();
+    } finally {
+      _$_OrdersViewModelBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 isLoading: ${isLoading},

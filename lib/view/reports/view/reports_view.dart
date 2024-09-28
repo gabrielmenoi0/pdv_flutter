@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:kartal/kartal.dart';
 import 'package:pdv_windows/core/base/view/base_widget.dart';
+import 'package:pdv_windows/core/extension/context_extension.dart';
 import 'package:pdv_windows/core/extension/double_extension.dart';
 import 'package:pdv_windows/view/_product/_widgets/loading_widget.dart';
 import 'package:pdv_windows/view/reports/model/chart_data_model.dart';
 import 'package:pdv_windows/view/reports/model/filter_report_model.dart';
+import 'package:pdv_windows/view/reports/model/legend_chart_model.dart';
 import 'package:pdv_windows/view/reports/view_model/reports_view_model.dart';
 import 'package:pdv_windows/viewmodel/setup_getIt.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -29,7 +31,7 @@ class ReportsView extends StatelessWidget {
 
   Widget buildScaffoldBody(BuildContext context, ReportsViewModel viewModel) {
     return Scaffold(
-      backgroundColor: context.colorScheme.secondary,
+      backgroundColor: context.general.colorScheme.secondary,
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
@@ -45,7 +47,7 @@ class ReportsView extends StatelessWidget {
                     return Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: Card(
-                        color: context.colorScheme.surface,
+                        color: context.general.colorScheme.surface,
                         child: Padding(
                           padding: EdgeInsets.all(20),
                           child: Column(
@@ -53,44 +55,57 @@ class ReportsView extends StatelessWidget {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                                 children: [
-                                  cardReports(context: context,chart: SfCircularChart(
+                                  cardReports(
+                                      legendList: viewModel.legendProduct,
+                                      context: context,
+                                      text: "Top Produtos",
+                                      subText: "Produtos mais vendidos",
+                                      chart: SfCircularChart(
+                                      tooltipBehavior: viewModel.tooltip,
                                       series: <CircularSeries>[
-                                        // Render pie chart
                                         PieSeries<ChartDataModel, String>(
-                                            dataSource: viewModel.chartData,
+                                            dataSource: viewModel.productChart,
                                             pointColorMapper:(ChartDataModel data, _) => data.color,
                                             xValueMapper: (ChartDataModel data, _) => data.x,
                                             yValueMapper: (ChartDataModel data, _) => data.y
                                         )
                                       ]
                                   )),
-                                  cardReports(context: context,chart: SfCartesianChart(
+                                  cardReports(
+                                      legendList: viewModel.legendSales,
+                                      context: context,
+                                      text: "Top Vendas",
+                                      subText: "Clientes com maior valor em compras",
+                                      chart: SfCartesianChart(
                                       primaryXAxis: CategoryAxis(),
-                                      primaryYAxis: NumericAxis(minimum: 0, maximum: 40, interval: 10),
                                       tooltipBehavior: viewModel.tooltip,
                                       series: <CartesianSeries<ChartDataModel, String>>[
                                         ColumnSeries<ChartDataModel, String>(
-                                            dataSource: viewModel.data,
+                                            dataSource: viewModel.salesChart,
                                             xValueMapper: (ChartDataModel data, _) => data.x,
                                             yValueMapper: (ChartDataModel data, _) => data.y,
-                                            name: 'Gold',
-                                            color: Color.fromRGBO(8, 142, 255, 1))
+                                            pointColorMapper: (ChartDataModel data, _) => viewModel.getColorForCustomer(data.x),
+                                        )
                                       ])),
-                                  cardReports(context: context,chart: SfCartesianChart(
+                                  cardReports(
+                                      legendList: viewModel.legendStatus,
+                                      context: context,
+                                      text: "Pedidos",
+                                      subText: "Pedidos aprovados e cancelados",
+                                      chart: SfCartesianChart(
                                       primaryXAxis: CategoryAxis(),
                                       primaryYAxis: NumericAxis(minimum: 0, maximum: 40, interval: 10),
                                       tooltipBehavior: viewModel.tooltip,
                                       series: <CartesianSeries<ChartDataModel, String>>[
                                         BarSeries<ChartDataModel, String>(
-                                            dataSource: viewModel.data,
+                                            dataSource: viewModel.ordersChartView,
                                             xValueMapper: (ChartDataModel data, _) => data.x,
                                             yValueMapper: (ChartDataModel data, _) => data.y,
-                                            name: 'Gold',
-                                            color: Color.fromRGBO(8, 142, 255, 1))
-                                      ])),
+                                            pointColorMapper: (ChartDataModel data, _) => viewModel.getColorForStatus(data.x),                                            // color: getColorForStatus((ChartDataModel data, _) => data.x as String),
+                                        )])),
                                 ],
                               ),
-                              context.emptySizedHeightBoxLow,
+                              context.sized.emptySizedHeightBoxLow,
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
@@ -98,7 +113,7 @@ class ReportsView extends StatelessWidget {
                                     flex: 5,
                                     child: Container(
                                       decoration: BoxDecoration(
-                                        border: Border.all(color: context.colorScheme.onPrimaryContainer, width: 1.0),
+                                        border: Border.all(color: context.general.colorScheme.onPrimaryContainer, width: 1.0),
                                         borderRadius: BorderRadius.circular(5.0),
                                       ),
                                       child: Padding(
@@ -123,10 +138,10 @@ class ReportsView extends StatelessWidget {
                                     )
 
                                   ),
-                                  context.emptySizedWidthBoxLow,
+                                  context.sized.emptySizedWidthBoxLow,
                                   Expanded(
                                     child: SizedBox(
-                                      height: context.dynamicHeight(0.070),
+                                      height: context.dynamicHeight(0.055),
                                       child: FilledButton.icon(
                                         onPressed: () => viewModel.export(),
                                         label: Text("Exportar"),
@@ -134,14 +149,14 @@ class ReportsView extends StatelessWidget {
                                         iconAlignment: IconAlignment.end,
                                         style: ButtonStyle(
                                           backgroundColor: WidgetStatePropertyAll(
-                                              context.colorScheme.secondary),
+                                              context.general.colorScheme.secondary),
                                         ),
                                       ),
                                     ),
                                   ),
                                 ],
                               ),
-                              context.emptySizedHeightBoxLow,
+                              context.sized.emptySizedHeightBoxLow,
                               Expanded(
                                 child: Scrollbar(
                                   controller: scrollController,
@@ -291,16 +306,14 @@ class ReportsView extends StatelessWidget {
     );
   }
 
-
-
   Widget itemTableRow({required String label,required BuildContext context}) {
     return Padding(
       padding: EdgeInsets.all(8.0),
       child: Text(
         label,
         textAlign: TextAlign.center,
-        style: context.textTheme.bodyMedium?.copyWith(
-          color: context.colorScheme.onPrimaryContainer,
+        style: context.general.textTheme.bodyMedium?.copyWith(
+          color: context.general.colorScheme.onPrimaryContainer,
         ),
       ),
     );
@@ -324,14 +337,68 @@ class ReportsView extends StatelessWidget {
     );
   }
 
-  Widget cardReports({required BuildContext context,required Widget chart}) {
+  Widget cardReports({required BuildContext context, required List<LegendChartModel> legendList, required String text, required String subText, required Widget chart}) {
     return Card(
-      color: context.colorScheme.surface,
+      color: context.general.colorScheme.surface,
       elevation: 5,
-      child: Container(
-        height: context.dynamicHeight(0.4),
-        width: context.dynamicWidth(0.3),
-        child: chart
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(text,style: context.general.textTheme.titleSmall?.copyWith(fontSize: 18)),
+                Text(subText,style: context.general.textTheme.titleSmall?.copyWith(fontSize: 14)),
+              ],
+          ),),
+          Container(
+            height: context.dynamicHeight(0.4),
+            width: context.dynamicWidth(0.3),
+            child: chart
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: SizedBox(
+              height: context.dynamicHeight(0.1),
+              width: context.dynamicWidth(0.28),
+              child: GridView.builder(
+                physics: PageScrollPhysics(),
+                shrinkWrap: true,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  childAspectRatio: 10,
+                  crossAxisSpacing: 5,
+                  mainAxisSpacing: 0,
+                ),
+                itemCount: legendList.length,
+                itemBuilder: (context, index) {
+                  var legend = legendList[index];
+                  return Row(
+                    children: [
+                      Container(
+                        width: 10,
+                        height: 10,
+                        color: legend.color,
+                        margin: const EdgeInsets.only(right: 8),
+                      ),
+                      Container(
+                        width: context.dynamicWidth(0.075),
+                        height: 15,
+                        child: Text(
+                          legend.label,
+                          style: context.general.textTheme.bodySmall?.copyWith(fontSize: 12),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ),
+          )
+        ],
       ),
     );
   }

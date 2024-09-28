@@ -28,22 +28,22 @@ class HomeView extends StatelessWidget {
   Widget buildScaffoldBody(BuildContext context, HomeViewModel viewModel) {
     return MenuBarWidget(
       barButtonStyle: ButtonStyle(
-        backgroundColor: WidgetStatePropertyAll(context.colorScheme.primary),
+        backgroundColor: WidgetStatePropertyAll(context.general.colorScheme.primary),
         animationDuration: Duration(seconds: 1),
-        foregroundColor:  WidgetStatePropertyAll(context.colorScheme.secondary),
+        foregroundColor:  WidgetStatePropertyAll(context.general.colorScheme.secondary),
         mouseCursor: WidgetStateProperty.all(MouseCursor.defer),
-        textStyle: WidgetStatePropertyAll(context.textTheme.bodyMedium),
+        textStyle: WidgetStatePropertyAll(context.general.textTheme.bodyMedium),
       ),
       barStyle: MenuStyle(
-        backgroundColor: WidgetStatePropertyAll(context.colorScheme.primary),
+        backgroundColor: WidgetStatePropertyAll(context.general.colorScheme.primary),
         mouseCursor: WidgetStateProperty.all(MouseCursor.defer),
       ),
       menuButtonStyle: ButtonStyle(
-        backgroundColor: WidgetStatePropertyAll(context.colorScheme.secondary),
+        backgroundColor: WidgetStatePropertyAll(context.general.colorScheme.secondary),
         animationDuration: Duration(seconds: 1),
-        foregroundColor: WidgetStatePropertyAll(context.colorScheme.primary),
+        foregroundColor: WidgetStatePropertyAll(context.general.colorScheme.primary),
         mouseCursor: WidgetStateProperty.all(MouseCursor.defer),
-        textStyle: WidgetStatePropertyAll(context.textTheme.bodyMedium),
+        textStyle: WidgetStatePropertyAll(context.general.textTheme.bodyMedium),
       ),
       barButtons: [
         BarButton(text: Text(LocaleKeys.label_menu.tr()),
@@ -51,13 +51,13 @@ class HomeView extends StatelessWidget {
           MenuButton(
             text: Text(LocaleKeys.label_orders.tr()),
             onTap: ()=> viewModel.openOrders(),
-            shortcutStyle: context.textTheme.bodyMedium!,
+            shortcutStyle: context.general.textTheme.bodyMedium!,
             icon: Icon(Icons.delivery_dining_rounded),
           ),
-          MenuDivider(color: context.colorScheme.primary,height: 1),
+          MenuDivider(color: context.general.colorScheme.primary,height: 1),
           MenuButton(
             text: Text(LocaleKeys.label_reports.tr()),
-            shortcutStyle: context.textTheme.bodyMedium!,
+            shortcutStyle: context.general.textTheme.bodyMedium!,
             onTap: ()=> viewModel.openReports(),
             icon: Icon(Icons.bar_chart),
           ),
@@ -75,7 +75,7 @@ class HomeView extends StatelessWidget {
           }
 
           return Scaffold(
-            backgroundColor: context.colorScheme.onSurface,
+            backgroundColor: context.general.colorScheme.onSurface,
             body: SafeArea(
               child: Image.asset(
                 ImagePaths.instance.logo,

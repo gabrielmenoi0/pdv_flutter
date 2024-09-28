@@ -89,6 +89,38 @@ mixin _$ReportsViewModel on _ReportsViewModelBase, Store {
     });
   }
 
+  late final _$ordersChartAtom =
+      Atom(name: '_ReportsViewModelBase.ordersChart', context: context);
+
+  @override
+  ObservableList<OrderChartModel> get ordersChart {
+    _$ordersChartAtom.reportRead();
+    return super.ordersChart;
+  }
+
+  @override
+  set ordersChart(ObservableList<OrderChartModel> value) {
+    _$ordersChartAtom.reportWrite(value, super.ordersChart, () {
+      super.ordersChart = value;
+    });
+  }
+
+  late final _$ordersChartViewAtom =
+      Atom(name: '_ReportsViewModelBase.ordersChartView', context: context);
+
+  @override
+  ObservableList<ChartDataModel> get ordersChartView {
+    _$ordersChartViewAtom.reportRead();
+    return super.ordersChartView;
+  }
+
+  @override
+  set ordersChartView(ObservableList<ChartDataModel> value) {
+    _$ordersChartViewAtom.reportWrite(value, super.ordersChartView, () {
+      super.ordersChartView = value;
+    });
+  }
+
   late final _$isLoadingAtom =
       Atom(name: '_ReportsViewModelBase.isLoading', context: context);
 
@@ -121,6 +153,24 @@ mixin _$ReportsViewModel on _ReportsViewModelBase, Store {
     });
   }
 
+  late final _$exportAsyncAction =
+      AsyncAction('_ReportsViewModelBase.export', context: context);
+
+  @override
+  Future export() {
+    return _$exportAsyncAction.run(() => super.export());
+  }
+
+  late final _$saveExcelFileAsyncAction =
+      AsyncAction('_ReportsViewModelBase.saveExcelFile', context: context);
+
+  @override
+  Future<void> saveExcelFile(
+      {required List<int> bytes, required String nameFile}) {
+    return _$saveExcelFileAsyncAction
+        .run(() => super.saveExcelFile(bytes: bytes, nameFile: nameFile));
+  }
+
   late final _$fetchProductsAsyncAction =
       AsyncAction('_ReportsViewModelBase.fetchProducts', context: context);
 
@@ -138,6 +188,28 @@ mixin _$ReportsViewModel on _ReportsViewModelBase, Store {
         name: '_ReportsViewModelBase.changeLoading');
     try {
       return super.changeLoading();
+    } finally {
+      _$_ReportsViewModelBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setInfoCharts() {
+    final _$actionInfo = _$_ReportsViewModelBaseActionController.startAction(
+        name: '_ReportsViewModelBase.setInfoCharts');
+    try {
+      return super.setInfoCharts();
+    } finally {
+      _$_ReportsViewModelBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  Color getColorForStatus(String status) {
+    final _$actionInfo = _$_ReportsViewModelBaseActionController.startAction(
+        name: '_ReportsViewModelBase.getColorForStatus');
+    try {
+      return super.getColorForStatus(status);
     } finally {
       _$_ReportsViewModelBaseActionController.endAction(_$actionInfo);
     }
@@ -239,6 +311,8 @@ filterProductList: ${filterProductList},
 filterPaymentList: ${filterPaymentList},
 filterCityList: ${filterCityList},
 filterAgeGroupList: ${filterAgeGroupList},
+ordersChart: ${ordersChart},
+ordersChartView: ${ordersChartView},
 isLoading: ${isLoading},
 filterOption: ${filterOption}
     ''';
