@@ -103,7 +103,7 @@ class ReportsView extends StatelessWidget {
                                             dataSource: viewModel.ordersChartView,
                                             xValueMapper: (ChartDataModel data, _) => data.x,
                                             yValueMapper: (ChartDataModel data, _) => data.y,
-                                            pointColorMapper: (ChartDataModel data, _) => viewModel.getColorForStatus(data.x),                                            // color: getColorForStatus((ChartDataModel data, _) => data.x as String),
+                                            pointColorMapper: (ChartDataModel data, _) => viewModel.getColorForStatus(data.x),
                                         )])),
                                 ],
                               ),
@@ -356,64 +356,80 @@ class ReportsView extends StatelessWidget {
     return Card(
       color: context.general.colorScheme.surface,
       elevation: 5,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(text,style: context.general.textTheme.titleSmall?.copyWith(fontSize: 18)),
-                Text(subText,style: context.general.textTheme.titleSmall?.copyWith(fontSize: 14)),
-              ],
-          ),),
-          Container(
-            height: context.dynamicHeight(0.4),
-            width: context.dynamicWidth(0.3),
-            child: chart
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: SizedBox(
-              height: context.dynamicHeight(0.1),
-              width: context.dynamicWidth(0.28),
-              child: GridView.builder(
-                physics: PageScrollPhysics(),
-                shrinkWrap: true,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  childAspectRatio: 10,
-                  crossAxisSpacing: 5,
-                  mainAxisSpacing: 0,
+      child: Observer(
+        builder: (context) {
+          if(legendList.isEmpty){
+            return Container(
+              height: context.dynamicHeight(0.4),
+              width: context.dynamicWidth(0.3),
+              child: Center(
+                child: Text(
+                  LocaleKeys.no_metrics.tr(),
+                  style: context.general.textTheme.bodyMedium,
                 ),
-                itemCount: legendList.length,
-                itemBuilder: (context, index) {
-                  var legend = legendList[index];
-                  return Row(
-                    children: [
-                      Container(
-                        width: 10,
-                        height: 10,
-                        color: legend.color,
-                        margin: const EdgeInsets.only(right: 8),
-                      ),
-                      Container(
-                        width: context.dynamicWidth(0.075),
-                        height: 15,
-                        child: Text(
-                          legend.label,
-                          style: context.general.textTheme.bodySmall?.copyWith(fontSize: 12),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
-                  );
-                },
               ),
-            ),
-          )
-        ],
+            );
+          }
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(text,style: context.general.textTheme.titleSmall?.copyWith(fontSize: 18)),
+                    Text(subText,style: context.general.textTheme.titleSmall?.copyWith(fontSize: 14)),
+                  ],
+              ),),
+              Container(
+                height: context.dynamicHeight(0.4),
+                width: context.dynamicWidth(0.3),
+                child: chart
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: SizedBox(
+                  height: context.dynamicHeight(0.1),
+                  width: context.dynamicWidth(0.28),
+                  child: GridView.builder(
+                    physics: PageScrollPhysics(),
+                    shrinkWrap: true,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3,
+                      childAspectRatio: 10,
+                      crossAxisSpacing: 5,
+                      mainAxisSpacing: 0,
+                    ),
+                    itemCount: legendList.length,
+                    itemBuilder: (context, index) {
+                      var legend = legendList[index];
+                      return Row(
+                        children: [
+                          Container(
+                            width: 10,
+                            height: 10,
+                            color: legend.color,
+                            margin: const EdgeInsets.only(right: 8),
+                          ),
+                          Container(
+                            width: context.dynamicWidth(0.075),
+                            height: 15,
+                            child: Text(
+                              legend.label,
+                              style: context.general.textTheme.bodySmall?.copyWith(fontSize: 12),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                ),
+              )
+            ],
+          );
+        }
       ),
     );
   }

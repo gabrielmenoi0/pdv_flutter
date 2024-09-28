@@ -72,7 +72,8 @@
   "neighborhood": "Bairro",
   "state": "Estado",
   "complement": "Complemento",
-  "reference": "Referência"
+  "reference": "Referência",
+  "no_metrics": "Nenhum indicador disponível!"
 
 
 }

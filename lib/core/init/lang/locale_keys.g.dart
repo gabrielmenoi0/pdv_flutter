@@ -75,5 +75,6 @@ abstract class  LocaleKeys {
   static const state = 'state';
   static const complement = 'complement';
   static const reference = 'reference';
+  static const no_metrics = 'no_metrics';
 
 }
