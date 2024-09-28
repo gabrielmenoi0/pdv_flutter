@@ -100,8 +100,6 @@ O projeto PDV Flutter, desenvolvido no desafio técnico do precesso seletivo da 
 
 **Essenciais UI:**
 
-
-
 - [Menu bar](https://pub.dev/packages/menu_bar) - Menu superior de navegação.
 - [Gráficos](https://pub.dev/packages/syncfusion_flutter_charts) - Graficos usados nos relatórios.
 - [Gerador de Excel](https://pub.dev/packages/syncfusion_flutter_xlsio) - Exportar dados para excel.
@@ -133,7 +131,7 @@ O projeto PDV Flutter, desenvolvido no desafio técnico do precesso seletivo da 
    arquivo [Pubspec.yaml](pubspec.yaml) e clique no botão no canto superior direito
    escrito `Pub get` e em seguida aguarde o carregamento as dependências do projeto. <br/>
 6. O processo de execução do projeto funcionará através de um botão de play na parte superior que
-   ambas IDEs dispõem. Caso escolha rodar o projeto via linha de comandos, utilize o
+   ambas IDEs disponibilizam. Caso escolha rodar o projeto via linha de comandos, utilize o
    comando `flutter run windows`. Lembre-se de antes de executar o comando de navegar até a pasta do projeto
    antes.
 
