@@ -133,7 +133,7 @@ O projeto PDV Flutter, desenvolvido no desafio técnico do precesso seletivo da 
    arquivo [Pubspec.yaml](pubspec.yaml) e clique no botão no canto superior direito
    escrito `Pub get` e em seguida aguarde o carregamento as dependências do projeto. <br/>
 6. O processo de execução do projeto funcionará através de um botão de play na parte superior que
-   ambas IDES dispõem. Caso escolha rodar o projeto via linha de comandos, utilize o
+   ambas IDEs dispõem. Caso escolha rodar o projeto via linha de comandos, utilize o
    comando `flutter run windows`. Lembre-se de antes de executar o comando de navegar até a pasta do projeto
    antes.
 
