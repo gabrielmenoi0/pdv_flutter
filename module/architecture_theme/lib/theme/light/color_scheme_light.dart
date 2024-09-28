@@ -16,7 +16,8 @@ class ColorSchemeLight {
       secondary: const Color(0xff7bbc44),
       onSurface: Colors.white,
       error: Colors.red,
-      onPrimaryContainer: Color(0xff2E2E2E)
+      onPrimaryContainer: Color(0xff2E2E2E),
+      surface: Colors.white
     );
   }
 }

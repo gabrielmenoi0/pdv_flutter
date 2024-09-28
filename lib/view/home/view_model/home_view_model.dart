@@ -20,7 +20,9 @@ abstract class _HomeViewModelBase extends BaseViewModel with Store{
   void dispose() {}
 
   @override
-  void init() {}
+  void init() {
+    changeView(order: true);
+  }
 
   changeView({required bool order}){
     switch(order){

@@ -1,3 +1,4 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 import 'package:pdv_windows/core/base/model/base_view_model.dart';
@@ -84,6 +85,10 @@ abstract class _OrdersViewModelBase extends BaseViewModel with Store{
     changeLoading();
 
     try {
+      // var connectivityResult = await (Connectivity().checkConnectivity());
+      // if (connectivityResult == ConnectivityResult.none) {
+      //   return SnackBarService.errorSnackBar("Não foi possível obter os pedidos !");
+      // }
       final response = await ordersService.fetchOrders();
       if (response.isNotNullOrEmpty) {
         await LocaleManager.ordersBox.saveList(OrdersModel(), response ?? []);

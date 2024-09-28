@@ -140,7 +140,7 @@ class DialogDetailsWidget{
                 ),
               ),
               actions: [
-                IconButton(onPressed: ()=> Navigator.pop(context), icon: Icon(Icons.close))
+                TextButton(onPressed: ()=> Navigator.pop(context), child: Text("Fechar"))
               ],
             );
           }

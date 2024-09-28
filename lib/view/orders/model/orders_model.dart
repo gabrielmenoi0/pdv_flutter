@@ -53,8 +53,14 @@ class Cliente {
   String? razaoSocial;
   String? email;
   DateTime? dataNascimento;
+  @JsonKey(includeFromJson: false,includeToJson: false)
+  int qtd = 0;
+  @JsonKey(includeFromJson: false,includeToJson: false)
+  double value = 0;
 
   Cliente({
+    this.value = 0,
+    this.qtd = 0,
     this.id,
     this.cnpj,
     this.cpf,
@@ -79,12 +85,18 @@ class EnderecoEntrega {
   String? estado;
   String? complemento;
   String? referencia;
+  @JsonKey(includeFromJson: false,includeToJson: false)
+  int qtd = 0;
+  @JsonKey(includeFromJson: false,includeToJson: false)
+  double value = 0;
 
   EnderecoEntrega({
     this.id,
     this.endereco,
     this.numero,
     this.cep,
+    this.qtd = 0,
+    this.value = 0,
     this.bairro,
     this.cidade,
     this.estado,

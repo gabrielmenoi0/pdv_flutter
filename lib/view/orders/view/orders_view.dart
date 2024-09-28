@@ -41,7 +41,7 @@ class OrdersView extends StatelessWidget {
                     padding: EdgeInsets.all(10),
                     child: Card(
                       child: Padding(
-                        padding: EdgeInsets.all(20),
+                        padding: EdgeInsets.all(10),
                         child: Row(
                           children: [
                             FractionallySizedBox(
@@ -62,11 +62,18 @@ class OrdersView extends StatelessWidget {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-          onPressed: () => viewModel.fetchOrdersAPI(),
-          tooltip: "Sincronizar",
-          backgroundColor: context.colorScheme.secondary,
-          child: Icon(Icons.refresh_outlined)),
+      floatingActionButton: Observer(
+        builder: (context) {
+          return Visibility(
+            visible: !viewModel.isLoading,
+            child: FloatingActionButton(
+                onPressed: () => viewModel.fetchOrdersAPI(),
+                tooltip: "Sincronizar",
+                backgroundColor: context.colorScheme.secondary,
+                child: Icon(Icons.refresh_outlined)),
+          );
+        }
+      ),
     );
   }
 
@@ -98,6 +105,7 @@ class OrdersView extends StatelessWidget {
                       child: FilledButton.icon(
                         onPressed: () => viewModel.searchOrders(),
                         label: Text("Pesquisar"),
+                        iconAlignment: IconAlignment.end,
                         icon: Icon(Icons.search),
                         style: ButtonStyle(
                           backgroundColor: WidgetStatePropertyAll(
@@ -126,8 +134,8 @@ class OrdersView extends StatelessWidget {
                     0: IntrinsicColumnWidth(),
                     1: FlexColumnWidth(),
                     2: FlexColumnWidth(),
-                    3: FlexColumnWidth(),
-                    4: FlexColumnWidth(),
+                    3: IntrinsicColumnWidth(),
+                    4: IntrinsicColumnWidth(),
                   },
                   defaultVerticalAlignment: TableCellVerticalAlignment.intrinsicHeight,
                   children: [

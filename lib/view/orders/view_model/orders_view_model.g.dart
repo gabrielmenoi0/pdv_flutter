@@ -99,6 +99,17 @@ mixin _$OrdersViewModel on _OrdersViewModelBase, Store {
   }
 
   @override
+  dynamic openDetails(OrdersModel order) {
+    final _$actionInfo = _$_OrdersViewModelBaseActionController.startAction(
+        name: '_OrdersViewModelBase.openDetails');
+    try {
+      return super.openDetails(order);
+    } finally {
+      _$_OrdersViewModelBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 isLoading: ${isLoading},
