@@ -44,9 +44,9 @@ O projeto PDV Flutter, desenvolvido no desafio técnico do precesso seletivo da 
 
 **lib/**<br/>
 **├── core**<br/>
+**├── get_it**<br/>
 **├── product**<br/>
 **├── view**<br/>
-**├── viewmodel**<br/>
 **└── main.dart**<br/>
 
 **module/**<br/>
